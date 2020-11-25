@@ -21,7 +21,7 @@ run:
 
     ensure_feasibility: true # Switching on unmet demand
 
-    cyclic_storage: true
+    cyclic_storage: false
 
     bigM: 1e6 # setting the scale of unmet demand, which cannot be too high, otherwise the optimisation will not converge
 

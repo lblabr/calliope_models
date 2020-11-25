@@ -7,6 +7,8 @@ import pytz
 import pandas
 import calliope
 
+periods = 96*3
+
 #timezone of value to import
 tzOfValues = pytz.timezone("UTC")
 
@@ -21,7 +23,7 @@ tzOffset = int(datetime.datetime.now().astimezone(LOCAL_TIMEZONE).utcoffset().to
 
 #PV-Prognose
 url = 'http://10.100.10.1:8086/query?db=openhab'
-data = {'q': "SELECT * FROM (SELECT mean(\"value\") FROM \"solcast\" WHERE (\"product\" = \'pvforecast\' AND \"version\" = \'latest\') AND time >= " + str(int(time.mktime(datetime.date.today().timetuple())*1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int(time.mktime(datetime.date.today().timetuple()) + 24*60*60)*1000*1000*1000 + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous)) "}
+data = {'q': "SELECT * FROM (SELECT mean(\"value\") FROM \"solcast\" WHERE (\"product\" = \'pvforecast\' AND \"version\" = \'latest\') AND time >= " + str(int(time.mktime(datetime.date.today().timetuple())*1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int(time.mktime(datetime.date.today().timetuple()) + (periods*15)/60*60*60)*1000*1000*1000 + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous)) "}
 headers = {}
 
 r = requests.post(url, headers=headers, data=data)
@@ -36,25 +38,28 @@ aa.to_csv('./timeseries_data/pv-prognose.csv', index=False, index_label="asdas",
 
 #PV-Prognose
 
-hourlyTimeSeries = pandas.Series(pandas.date_range(datetime.datetime.today().strftime("%Y-%m-%d"), periods=96, freq='15T'))
+hourlyTimeSeries = pandas.Series(pandas.date_range(datetime.datetime.today().strftime("%Y-%m-%d"), periods=periods, freq='15T'))
 
 #Prognose Demand Start
-demandTemplate = pandas.Series([-500 for x in range(500)])
+demandTemplate = pandas.Series([-500 for x in range(periods)])
 demand = pandas.concat([hourlyTimeSeries, demandTemplate], axis=1, join='inner')
 demand.to_csv('./timeseries_data/demand_node1.csv', index=False, index_label="asdas", header=["Time","Demand"])
 #Prognose Demand End
 
 #Prognose Demand-EV Start
-demandTemplate = pandas.Series([0 for x in range(500)])
-demandTemplate[88:]=-3700
+demandTemplate = pandas.Series([0 for x in range(periods)])
+demandTemplate[84:96]=-3700
 demand = pandas.concat([hourlyTimeSeries, demandTemplate], axis=1, join='inner')
 demand.to_csv('./timeseries_data/demand_ev.csv', index=False, index_label="asdas", header=["Time","Demand"])
 #Prognose Demand-EV End
 
 #Price Start
 #priceTemplate = pandas.DataFrame({'Prices': [0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.13,0.3,0.3,0.3,0.3,0.3]},index=index)
-priceTemplate = pandas.Series([0.3 for x in range(500)])
-priceTemplate[18*4:18*4+4] = 0.13
+priceTemplate = pandas.Series([0.3 for x in range(periods)])
+priceTemplate[96*0+18*4:96*0+18*4+4] = 0.13
+priceTemplate[96*1+18*4:96*1+18*4+4] = 0.13
+#priceTemplate[96*2+18*4:96*2+18*4+4] = 0.13
+
 print(priceTemplate)
 #exit()
 prices = pandas.concat([hourlyTimeSeries, priceTemplate], axis=1, join='inner')
@@ -63,10 +68,12 @@ prices.to_csv('./timeseries_data/prices.csv', index=False, index_label="asdas", 
 
 model = calliope.Model(
     'model.yaml',
-    override_dict={'model.subset_time': datetime.datetime.today().strftime("%Y-%m-%d"), 'run.solver': 'glpk'}
+    override_dict={'model.subset_time': [datetime.datetime.today().strftime("%Y-%m-%d"),(datetime.datetime.today() + datetime.timedelta(days=2)).strftime("%Y-%m-%d")], 'run.solver': 'glpk'}
+#    override_dict={'model.subset_time': datetime.datetime.today().strftime("%Y-%m-%d"), 'run.solver': 'glpk'}
 )
 
 model.run()
+
 model.to_csv(datetime.datetime.today().strftime("%Y%m%d_%H%M%S"))
 
 
@@ -74,7 +81,7 @@ url = 'http://10.100.10.1:8086/write?db=openhab&precision=s'
 headers = {}
 myDate = datetime.datetime.today()
 
-if 1==0:
+if 1==1:
     for obj in model.results["carrier_con"].sel(loc_tech_carriers_con='location::battery::electricity'):
 
         if model.results["carrier_prod"].sel(loc_tech_carriers_prod='location::pv::electricity').sel(timesteps=obj.coords["timesteps"].values).values == 0 and abs(obj.values) > 0:

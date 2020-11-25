@@ -12,7 +12,7 @@ locations:
     # X0-end
 
     ev1.coordinates: {lat: 3, lon: 4}
-    #ev2.coordinates: {lat: 39, lon: -1}
+    #ev2.coordinates: {lat: 3, lon: 5}
     #ev3.coordinates: {lat: 39, lon: -2}
 
 #    ev1.ev_demand.constraints.resource: file=demand_ev.csv:Demand
@@ -30,10 +30,13 @@ locations:
 
 
 links:
-    location, ev1:
-        techs:
-           free_transmission:
+#    location,ev1:
+#        techs:
+#           free_transmission:
 
+#    location,ev2:
+#        techs:
+#           free_transmission:
 
     #location,ev2:
     #    techs:
