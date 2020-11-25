@@ -1,0 +1,7 @@
+techs,names
+demand_power,Power demand
+free_transmission,Local power transmission
+ac_transmission,AC power transmission
+csp,Concentrating solar power
+ccgt,Combined cycle gas turbine
+battery,Battery storage

@@ -1,0 +1,13 @@
+locations:
+    # X0-start
+    X0:
+        techs:
+            grid_supply:
+            grid_supply_variable:
+            pv:
+#            feedin:
+            demand_electricity:
+                constraints.resource: file=demand_node1.csv:Demand
+        coordinates: {x: 3, y: 3}
+    # X0-end
+

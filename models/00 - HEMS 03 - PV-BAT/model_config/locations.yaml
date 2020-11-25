@@ -1,0 +1,43 @@
+locations:
+    # X0-start
+    location:
+        coordinates: {lat: 3, lon: 3}
+        techs:
+            grid_supply:
+            grid_supply_variable:
+            battery:
+            pv:
+            demand_electricity:
+                constraints.resource: file=demand_node1.csv:Demand
+    # X0-end
+
+    ev1.coordinates: {lat: 3, lon: 4}
+    #ev2.coordinates: {lat: 39, lon: -1}
+    #ev3.coordinates: {lat: 39, lon: -2}
+
+#    ev1.ev_demand.constraints.resource: file=demand_ev.csv:Demand
+
+    ev1: #, region1-2, region1-3:
+        techs:
+            ev:
+            ev_bat:
+            ev_demand:
+                constraints.resource: file=demand_ev.csv:Demand
+
+
+#    N1: # location for branching heat transmission network
+#        coordinates: {lat: 3, lon: 4}
+
+
+links:
+    location, ev1:
+        techs:
+           free_transmission:
+
+
+    #location,ev2:
+    #    techs:
+    #        free_transmission:
+    #location,ev3:
+    #    techs:
+    #        free_transmission:

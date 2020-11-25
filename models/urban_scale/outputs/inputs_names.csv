@@ -1,0 +1,10 @@
+techs,names
+boiler,Natural gas boiler
+supply_gas,Natural gas import
+heat_pipes,District heat distribution
+supply_grid_power,National grid import
+pv,Solar photovoltaic power
+chp,Combined heat and power
+demand_heat,Heat demand
+demand_electricity,Electrical demand
+power_lines,Electrical power distribution

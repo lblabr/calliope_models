@@ -1,0 +1,16 @@
+carriers,techs,systemwide_capacity_factor
+heat,boiler,0.1537598296831983
+heat,supply_gas,0.0
+heat,supply_grid_power,0.0
+heat,pv,0.0
+heat,chp,0.5885039148738785
+electricity,boiler,0.0
+electricity,supply_gas,0.0
+electricity,supply_grid_power,0.0787373463118272
+electricity,pv,0.20185729186145873
+electricity,chp,0.7356298935923473
+gas,boiler,0.0
+gas,supply_gas,0.5840977663687311
+gas,supply_grid_power,0.0
+gas,pv,0.0
+gas,chp,0.0

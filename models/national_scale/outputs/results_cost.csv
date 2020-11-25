@@ -1,0 +1,14 @@
+costs,locs,techs,cost
+monetary,region1,ac_transmission:region2,487.527364645806
+monetary,region1,ccgt,169845.806206407
+monetary,region1,free_transmission:region1-1,0.0
+monetary,region1,free_transmission:region1-2,0.0
+monetary,region1,free_transmission:region1-3,0.0
+monetary,region1-1,csp,95054.356251866
+monetary,region1-1,free_transmission:region1,0.0
+monetary,region1-2,csp,0.0
+monetary,region1-2,free_transmission:region1,0.0
+monetary,region1-3,csp,9013.12138917048
+monetary,region1-3,free_transmission:region1,0.0
+monetary,region2,ac_transmission:region1,1067.17247444747
+monetary,region2,battery,1581.36339825403

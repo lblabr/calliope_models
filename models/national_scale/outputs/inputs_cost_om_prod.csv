@@ -1,0 +1,12 @@
+costs,locs,techs,cost_om_prod
+monetary,region1,ac_transmission:region2,0.002
+monetary,region1,free_transmission:region1-1,0.0
+monetary,region1,free_transmission:region1-2,0.0
+monetary,region1,free_transmission:region1-3,0.0
+monetary,region1-1,csp,0.002
+monetary,region1-1,free_transmission:region1,0.0
+monetary,region1-2,csp,0.002
+monetary,region1-2,free_transmission:region1,0.0
+monetary,region1-3,csp,0.002
+monetary,region1-3,free_transmission:region1,0.0
+monetary,region2,ac_transmission:region1,0.002

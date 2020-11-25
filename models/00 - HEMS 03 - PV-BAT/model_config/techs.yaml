@@ -1,0 +1,189 @@
+##
+# TECHNOLOGY DEFINITIONS
+##
+
+# Note: '-start' and '-end' is used in tutorial documentation only
+
+techs:
+
+    ##
+    # Supply
+    ##
+
+    #grid_supply start
+    feedin:
+        essentials:
+            name: grid import
+            carrier: electricity
+            parent: supply
+        constraints:
+            lifetime: 25
+            energy_cap_max: .inf
+        costs:
+            monetary:
+                interest_rate: 0.1
+                energy_cap: 0 #Leistungspreis
+                om_con: -0.278 # 10p/kWh electricity price #ppt
+  
+    grid_supply:
+        essentials:
+            name: Grid Import
+            carrier: electricity
+            parent: supply
+        constraints:
+            lifetime: 25
+            energy_cap_max: .inf
+        costs:
+            monetary:
+                interest_rate: 0.1
+                energy_cap: 0 #Leistungspreis
+                om_con: 0.25 # 10p/kWh electricity price #ppt
+
+    grid_supply_variable:
+        essentials:
+            name: 'Grid Import (dyn.)'
+            color: '#C5FFE3'
+            parent: supply
+            carrier: electricity
+        constraints:
+            lifetime: 25
+            energy_cap_max: inf
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 0 # Leistungspreis ?
+                om_con: file=prices.csv:Price # 10p/kWh electricity price #ppt
+    #grid_supply end
+
+    pv:
+        essentials:
+            name: 'Rooftop PV'
+            color: '#B59C2B'
+            parent: supply
+            carrier_out: electricity
+        constraints:
+            export_carrier: electricity
+            export_cap: 2500
+            resource: file=pv-prognose.csv:PV
+        costs:
+            monetary:
+                interest_rate: 0.1
+                om_con: -0.28 # 10p/kWh electricity price #ppt
+
+    ##
+    # Storage
+    ##
+    # battery-start
+    battery:
+        essentials:
+            name: 'Battery Storage'
+            color: '#3B61E3'
+            parent: storage
+            carrier: electricity
+        constraints:
+            energy_cap_max: 14720  # kW
+#            storage_initial: 0.9
+            storage_initial: 0.7
+            storage_cap_max: 40000
+            energy_eff: 0.95  # 0.95 * 0.95 = 0.9025 round trip efficiency
+            storage_loss: 0.01  # No loss over time assumed
+            lifetime: 25
+#            force_asynchronous_prod_con: true
+        costs:
+            monetary:
+                interest_rate: 0.11
+#                storage_cap: 200  # USD per kWh storage capacity
+    # battery-end
+
+    ##
+    # Demand
+    ##
+    # demand-start
+    demand_electricity:
+        essentials:
+            name: 'Power demand'
+            color: '#072486'
+            parent: demand
+            carrier: electricity
+    # demand-end
+
+    ##EV
+    ev:
+        essentials:
+            name: 'Electric Vehicle'
+            color: '#8E2999'
+            parent: conversion
+            carrier_in: electricity
+            carrier_out: electricity_ev
+        constraints:
+            energy_eff: 1
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+
+    ev_bat:
+        essentials:
+            name: 'ev_bat'
+            color: '#3BFFFF'
+            parent: storage
+            carrier: electricity_ev
+        constraints:
+            energy_cap_max: 15100  # kW
+            storage_cap_max: 80000
+            energy_eff: 1  # 0.95 * 0.95 = 0.9025 round trip efficiency
+            storage_loss: 0.01  # No loss over time assumed
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.11
+# 
+
+    ev_demand:
+        essentials:
+            name: 'ev_demand'
+            color: '#FF2486'
+            parent: demand
+            carrier: electricity_ev
+    ##EV
+
+
+
+
+
+
+
+
+    ##
+    # Transmission
+    ##
+
+    # transmission-start
+    ac_transmission:
+        essentials:
+            name: 'AC power transmission'
+            color: '#8465A9'
+            parent: transmission
+            carrier: electricity
+        constraints:
+            energy_eff: 0.85
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 200
+                om_prod: 0.002
+
+    free_transmission:
+        essentials:
+            name: 'Local power transmission'
+            color: '#6783E3'
+            parent: transmission
+            carrier: electricity
+        constraints:
+            energy_cap_max: inf
+            energy_eff: 1.0
+        costs:
+            monetary:
+                om_prod: 0
+    # transmission-end

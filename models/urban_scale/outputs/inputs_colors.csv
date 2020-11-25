@@ -1,0 +1,10 @@
+techs,colors
+boiler,#8E2999
+supply_gas,#C98AAD
+heat_pipes,#823739
+supply_grid_power,#C5ABE3
+pv,#F9D956
+chp,#E4AB97
+demand_heat,#660507
+demand_electricity,#072486
+power_lines,#6783E3

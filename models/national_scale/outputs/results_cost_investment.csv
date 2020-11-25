@@ -1,0 +1,8 @@
+costs,locs,techs,cost_investment
+monetary,region1,ac_transmission:region2,487.527364645806
+monetary,region1,ccgt,33955.9126613078
+monetary,region1-1,csp,93606.4672479425
+monetary,region1-2,csp,0.0
+monetary,region1-3,csp,8986.07268705284
+monetary,region2,ac_transmission:region1,487.527364645806
+monetary,region2,battery,1581.36339825403

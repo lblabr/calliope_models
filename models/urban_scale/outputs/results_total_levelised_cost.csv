@@ -1,0 +1,4 @@
+carriers,costs,total_levelised_cost
+heat,monetary,0.09578361032689676
+electricity,monetary,0.0806948211029717
+gas,monetary,0.03448781548978907

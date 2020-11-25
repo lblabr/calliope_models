@@ -1,0 +1,10 @@
+carrier_tiers,carriers,locs,techs,carrier_ratios
+out,electricity,X1,chp,1.0
+out,gas,X1,chp,1.0
+out,heat,X1,chp,1.0
+out_2,electricity,X1,chp,1.0
+out_2,gas,X1,chp,1.0
+out_2,heat,X1,chp,0.8
+in,electricity,X1,chp,1.0
+in,gas,X1,chp,1.0
+in,heat,X1,chp,1.0

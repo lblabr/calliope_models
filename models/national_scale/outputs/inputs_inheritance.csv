@@ -1,0 +1,7 @@
+techs,inheritance
+demand_power,demand
+free_transmission,transmission
+ac_transmission,transmission
+csp,supply_plus
+ccgt,supply
+battery,storage

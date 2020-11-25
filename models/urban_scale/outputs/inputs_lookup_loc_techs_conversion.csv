@@ -1,0 +1,5 @@
+carrier_tiers,locs,techs,lookup_loc_techs_conversion
+out,X2,boiler,X2::boiler::heat
+out,X3,boiler,X3::boiler::heat
+in,X2,boiler,X2::boiler::gas
+in,X3,boiler,X3::boiler::gas

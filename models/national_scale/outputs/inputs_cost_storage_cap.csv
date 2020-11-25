@@ -1,0 +1,5 @@
+costs,locs,techs,cost_storage_cap
+monetary,region1-1,csp,50.0
+monetary,region1-2,csp,50.0
+monetary,region1-3,csp,50.0
+monetary,region2,battery,200.0

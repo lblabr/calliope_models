@@ -1,0 +1,3 @@
+costs,locs,techs,cost_om_prod
+monetary,X1,chp,0.004
+monetary,X2,pv,-0.0203

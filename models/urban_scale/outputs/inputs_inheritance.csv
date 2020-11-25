@@ -1,0 +1,10 @@
+techs,inheritance
+boiler,conversion
+supply_gas,supply
+heat_pipes,transmission
+supply_grid_power,supply
+pv,supply_power_plus.supply_plus
+chp,conversion_plus
+demand_heat,demand
+demand_electricity,demand
+power_lines,transmission

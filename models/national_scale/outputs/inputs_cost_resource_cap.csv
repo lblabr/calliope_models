@@ -1,0 +1,4 @@
+costs,locs,techs,cost_resource_cap
+monetary,region1-1,csp,200.0
+monetary,region1-2,csp,200.0
+monetary,region1-3,csp,200.0

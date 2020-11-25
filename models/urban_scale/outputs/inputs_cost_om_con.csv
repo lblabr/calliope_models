@@ -1,0 +1,7 @@
+costs,locs,techs,cost_om_con
+monetary,X1,supply_gas,0.025
+monetary,X1,supply_grid_power,0.1
+monetary,X2,boiler,0.004
+monetary,X2,supply_gas,0.025
+monetary,X3,boiler,0.004
+monetary,X3,supply_gas,0.025

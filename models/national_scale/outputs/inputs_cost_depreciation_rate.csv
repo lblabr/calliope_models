@@ -1,0 +1,8 @@
+costs,locs,techs,cost_depreciation_rate
+monetary,region1,ac_transmission:region2,0.11016807219002081
+monetary,region1,ccgt,0.11016807219002081
+monetary,region1-1,csp,0.11016807219002081
+monetary,region1-2,csp,0.11016807219002081
+monetary,region1-3,csp,0.11016807219002081
+monetary,region2,ac_transmission:region1,0.11016807219002081
+monetary,region2,battery,0.11016807219002081
