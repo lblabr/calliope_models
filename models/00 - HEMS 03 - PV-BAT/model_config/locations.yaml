@@ -1,10 +1,25 @@
 locations:
     # X0-start
+
+#    supply:
+#        coordinates: {lat: 3, lon: 2}
+#        techs:
+#            supply_combined:
+
     location:
         coordinates: {lat: 3, lon: 3}
         techs:
             grid_supply:
+            grid_netflex:
             grid_supply_variable:
+
+            supply_combined_dynamic:
+
+#            grid_supply_umlagen:
+#            grid_supply_epex_spot:
+#            supply_combined_grid:
+#            supply_combined_dynamic:
+#            supply_combined_awattar:
             battery:
             pv:
             demand_electricity:
@@ -14,8 +29,10 @@ locations:
     ev1.coordinates: {lat: 3, lon: 4}
     #ev2.coordinates: {lat: 3, lon: 5}
     #ev3.coordinates: {lat: 39, lon: -2}
+    flex_load1.coordinates: {lat: 4, lon: 4}
 
 #    ev1.ev_demand.constraints.resource: file=demand_ev.csv:Demand
+
 
     ev1: #, region1-2, region1-3:
         techs:
@@ -24,15 +41,22 @@ locations:
             ev_demand:
                 constraints.resource: file=demand_ev.csv:Demand
 
-
-#    N1: # location for branching heat transmission network
-#        coordinates: {lat: 3, lon: 4}
-
+    flex_load1:
+        techs:
+            boiler:
+            boiler_bat:
+            boiler_demand:
+                constraints.resource: file=demand_ev.csv:Demand
 
 links:
-#    location,ev1:
-#        techs:
-#           free_transmission:
+    location,flex_load1:
+        techs:
+           free_transmission1:
+
+    location,ev1:
+        techs:
+           free_transmission2:
+
 
 #    location,ev2:
 #        techs:

@@ -1,11 +1,11 @@
 import:  # Import other files from paths relative to this file, or absolute paths
     - 'model_config/techs.yaml'
     - 'model_config/locations.yaml'
-#    - 'scenarios.yaml'
+    - 'scenarios.yaml'
 
 model:
-    name: HEMS 00
-
+    name: Seumestraße 70, 04249 Leipzig - Modell (PV, Bat, Netzflex, PeakShaving)
+    
     # What version of Calliope this model is intended for
     calliope_version: 0.6.6
 

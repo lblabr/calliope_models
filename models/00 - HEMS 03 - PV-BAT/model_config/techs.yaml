@@ -6,15 +6,65 @@
 
 techs:
 
+    supply_combined_grid:
+        essentials:
+            name: 'Combined Price Grid'
+            color: '#2020FF'
+            parent: conversion_plus
+
+            primary_carrier_in: electricity_residual
+            carrier_in: electricity_residual
+            carrier_in_2: electricity_netzflex
+
+            primary_carrier_out: electricity
+            carrier_out: electricity
+
+        constraints:
+            export_carrier: electricity
+
+    supply_combined_dynamic:
+        essentials:
+            name: 'Combined Price Dynamic'
+            color: '#ABABFF'
+            parent: conversion_plus
+
+            primary_carrier_in: electricity_dynamic
+            carrier_in: electricity_dynamic
+            carrier_in_2: electricity_netzflex
+
+            primary_carrier_out: electricity
+            carrier_out: electricity
+
+        constraints:
+            export_carrier: electricity
+
+
+    supply_combined_awattar:
+        essentials:
+            name: 'Combined Price aWATTar'
+            color: '#AB00FF'
+            parent: conversion_plus
+
+            primary_carrier_in: electricity_epex_spot
+            carrier_in: electricity_epex_spot
+            carrier_in_2: electricity_umlagen
+            carrier_in_3: electricity_netzflex
+
+            primary_carrier_out: electricity
+            carrier_out: electricity
+
+        constraints:
+            export_carrier: electricity
+
+
     ##
     # Supply
     ##
-
-    #grid_supply start
-    feedin:
+    grid_netflex:
         essentials:
-            name: grid import
-            carrier: electricity
+            name: 'Grid Import Netzflex'
+            color: '#F00200'
+            carrier: electricity_netzflex
             parent: supply
         constraints:
             lifetime: 25
@@ -23,12 +73,14 @@ techs:
             monetary:
                 interest_rate: 0.1
                 energy_cap: 0 #Leistungspreis
-                om_con: -0.278 # 10p/kWh electricity price #ppt
+                om_con: file=netzflex.csv:Incentive # 10p/kWh electricity price #ppt
+#                om_con: 0 # 10p/kWh electricity price #ppt
   
     grid_supply:
         essentials:
-            name: Grid Import
-            carrier: electricity
+            name: 'Grid Import'
+            color: '#3F0300'
+            carrier: electricity_residual
             parent: supply
         constraints:
             lifetime: 25
@@ -37,14 +89,14 @@ techs:
             monetary:
                 interest_rate: 0.1
                 energy_cap: 0 #Leistungspreis
-                om_con: 0.25 # 10p/kWh electricity price #ppt
+                om_con: 0.2785 # 10p/kWh electricity price #ppt
 
     grid_supply_variable:
         essentials:
             name: 'Grid Import (dyn.)'
-            color: '#C5FFE3'
+            color: '#40F400'
             parent: supply
-            carrier: electricity
+            carrier: electricity_dynamic
         constraints:
             lifetime: 25
             energy_cap_max: inf
@@ -53,12 +105,46 @@ techs:
                 interest_rate: 0.10
                 energy_cap: 0 # Leistungspreis ?
                 om_con: file=prices.csv:Price # 10p/kWh electricity price #ppt
-    #grid_supply end
 
+    grid_supply_epex_spot:
+        essentials:
+            name: 'Bezug aWATTar Spot'
+            color: '#CCF700'
+            parent: supply
+            carrier: electricity_epex_spot
+        constraints:
+            lifetime: 25
+            energy_cap_max: inf
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 0 # Leistungspreis ?
+                om_con: file=awattar.csv:Price # 10p/kWh electricity price #ppt
+
+    grid_supply_umlagen:
+        essentials:
+            name: 'Bezug aWATTar Umlagen'
+            color: '#30F3CC'
+            parent: supply
+            carrier: electricity_umlagen
+        constraints:
+            lifetime: 25
+            energy_cap_max: inf
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 0 # Leistungspreis ?
+#                om_con: file=awattar.csv:Price # 10p/kWh electricity price #ppt
+                om_con: 0.2064
+
+    ##
+    # PV
+    ##
+    # PV-start
     pv:
         essentials:
             name: 'Rooftop PV'
-            color: '#B59C2B'
+            color: '#90CC90'
             parent: supply
             carrier_out: electricity
         constraints:
@@ -68,7 +154,14 @@ techs:
         costs:
             monetary:
                 interest_rate: 0.1
-                om_con: -0.28 # 10p/kWh electricity price #ppt
+#>30%
+                om_con: -0.1674 # 10p/kWh electricity price #ppt
+                export: -0.12 # FIT return for PV export
+#<30%
+#                om_con: -0.1236 # 10p/kWh electricity price #ppt
+#                export: -0.1638 # FIT return for PV export
+    # PV-end
+
 
     ##
     # Storage
@@ -77,22 +170,19 @@ techs:
     battery:
         essentials:
             name: 'Battery Storage'
-            color: '#3B61E3'
+            color: '#FF0000'
             parent: storage
             carrier: electricity
         constraints:
             energy_cap_max: 14720  # kW
-#            storage_initial: 0.9
-            storage_initial: 0.7
             storage_cap_max: 40000
+
             energy_eff: 0.9  # 0.95 * 0.95 = 0.9025 round trip efficiency
             storage_loss: 0.01  # No loss over time assumed
             lifetime: 25
-#            force_asynchronous_prod_con: true
         costs:
             monetary:
-                interest_rate: 0.11
-#                storage_cap: 200  # USD per kWh storage capacity
+                interest_rate: 0.1
     # battery-end
 
     ##
@@ -102,37 +192,54 @@ techs:
     demand_electricity:
         essentials:
             name: 'Power demand'
-            color: '#072486'
+            color: '#700700'
             parent: demand
             carrier: electricity
     # demand-end
+
+#    demand_dummy:
+#        essentials:
+#            name: 'Power dummy demand'
+#            color: '#072486'
+#            parent: demand
+#            carrier: electricity_dummy
+
+
 
     ##EV
     ev:
         essentials:
             name: 'Electric Vehicle'
-            color: '#8E2999'
+            color: '#800800'
             parent: conversion
             carrier_in: electricity
             carrier_out: electricity_ev
         constraints:
             energy_eff: 1
             lifetime: 25
+
+            units_max: 10
+            energy_cap_per_unit: 8000
+            energy_cap_min_use: 0.5
+
         costs:
             monetary:
+                energy_cap: 0
                 interest_rate: 0.10
 
     ev_bat:
         essentials:
             name: 'ev_bat'
-            color: '#3BFFFF'
+            color: '#900900'
             parent: storage
             carrier: electricity_ev
         constraints:
-            energy_cap_max: 15100  # kW
+            energy_cap_max: 14800  # kW
+#            energy_cap_min_use: 0.8
+
             storage_cap_max: 80000
             energy_eff: 1  # 0.95 * 0.95 = 0.9025 round trip efficiency
-            storage_loss: 0.02  # No loss over time assumed
+            storage_loss: 0.001  # No loss over time assumed
             lifetime: 25
         costs:
             monetary:
@@ -142,7 +249,7 @@ techs:
     ev_demand:
         essentials:
             name: 'ev_demand'
-            color: '#FF2486'
+            color: '#A00A00'
             parent: demand
             carrier: electricity_ev
     ##EV
@@ -150,8 +257,53 @@ techs:
 
 
 
+    ##Heizstab
+    boiler:
+        essentials:
+            name: 'boiler'
+            color: '#800800'
+            parent: conversion
+            carrier_in: electricity
+            carrier_out: electricity_boiler
+        constraints:
+            energy_eff: 1
+            lifetime: 25
 
+            units_max: 10
+            energy_cap_per_unit: 8000
+            energy_cap_min_use: 0.5
 
+        costs:
+            monetary:
+                energy_cap: 0
+                interest_rate: 0.10
+
+    boiler_bat:
+        essentials:
+            name: 'boiler_bat'
+            color: '#900900'
+            parent: storage
+            carrier: electricity_boiler
+        constraints:
+            energy_cap_max: 14800  # kW
+#            energy_cap_min_use: 0.8
+
+            storage_cap_max: 80000
+            energy_eff: 1  # 0.95 * 0.95 = 0.9025 round trip efficiency
+            storage_loss: 0.001  # No loss over time assumed
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.11
+# 
+
+    boiler_demand:
+        essentials:
+            name: 'boiler_demand'
+            color: '#A00A00'
+            parent: demand
+            carrier: electricity_boiler
+    ##Heizstab
 
 
     ##
@@ -162,7 +314,7 @@ techs:
     ac_transmission:
         essentials:
             name: 'AC power transmission'
-            color: '#8465A9'
+            color: '#B00B00'
             parent: transmission
             carrier: electricity
         constraints:
@@ -174,10 +326,10 @@ techs:
                 energy_cap: 200
                 om_prod: 0.002
 
-    free_transmission:
+    free_transmission1:
         essentials:
             name: 'Local power transmission'
-            color: '#6783E3'
+            color: '#C00C00'
             parent: transmission
             carrier: electricity
         constraints:
@@ -186,4 +338,21 @@ techs:
         costs:
             monetary:
                 om_prod: 0
+
+    free_transmission2:
+        essentials:
+            name: 'Local power transmission'
+            color: '#C00C00'
+            parent: transmission
+            carrier: electricity
+        constraints:
+            energy_cap_max: inf
+            energy_eff: 1.0
+        costs:
+            monetary:
+                om_prod: 0
+
+
+
+
     # transmission-end
