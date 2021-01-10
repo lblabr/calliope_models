@@ -13,8 +13,7 @@ import warnings
 import plotly.offline as pltly
 import jinja2
 
-periods = 96*3
-
+periods = 96*3-1 #netzflex hat nur die nächsten drei Tage ...
 
 print(datetime.datetime.now())
 print("Start")
@@ -30,12 +29,15 @@ LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone(datetime.timedelta(0)))
 tzOffset = int(datetime.datetime.now().astimezone(LOCAL_TIMEZONE).utcoffset().total_seconds()) - int(datetime.datetime.now().astimezone(tzOfValues).utcoffset().total_seconds())
 
 ######################################
-dtStart = datetime.date.today()
-#dtStart = datetime.date(2020, 11, 5)
+#dtStart = datetime.datetime.today().date()
+dtStart = datetime.datetime(datetime.datetime.today().year, datetime.datetime.today().month, datetime.datetime.today().day, 0,0,0)
+#dtStart = datetime.datetime(2020, 11, 5, 0,0,0)
 #dtStart = datetime.date(2020, 12, 10)
 #dtStart = datetime.date(2020, 8, 9)
 #dtStart = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:00"),'%Y-%m-%d %H:00')
+print(dtStart)
 dtEnd = dtStart + datetime.timedelta(minutes=periods*15)
+print(dtEnd)
 
 ldtStart = time.mktime(dtStart.timetuple())
 ldtEnd = time.mktime(dtEnd.timetuple())
@@ -52,7 +54,8 @@ if (1==1):
         print(obj)
     
         if obj["type"] == "Price" and obj['name'] == "Mitnetz GridFee Incentive":
-            r = requests.get("https://flexengine.staging.energiemanagement-enviam.de/incentive/" + obj["id"] + "/" + str(int(ldtStart-3*60*60)) + "/" + str(int(ldtEnd+15*60)), headers=headers)
+            r = requests.get("https://flexengine.staging.energiemanagement-enviam.de/incentive/" + obj["id"] + "/" + str(int(ldtStart)) + "/" + str(int(ldtEnd+10)), headers=headers) # vergleicht auf kleiner ... deshlab offset
+#            r = requests.get("https://flexengine.staging.energiemanagement-enviam.de/incentive/" + obj["id"] + "/" + str(int(ldtStart-3*60*60)) + "/" + str(int(ldtEnd+15*60)), headers=headers)
 #            r = requests.get("https://flexengine.staging.energiemanagement-enviam.de/incentive/" + obj["id"] + "/" + str(int(ldtStart-3*60*60)) + "/" + str(int(ldtEnd+72*60*60)), headers=headers)
 #            print("https://flexengine.staging.energiemanagement-enviam.de/incentive/" + obj["id"] + "/" + str(int(time.mktime(datetime.date.today().timetuple()))) + "/" + str(int(time.mktime(datetime.date.today().timetuple()))+144*60*60) )
 #            print("https://flexengine.staging.energiemanagement-enviam.de/incentive/" + obj["id"])
@@ -78,7 +81,8 @@ if (1==1):
 
 #PV-Prognose
 url = 'http://10.100.10.1:8086/query?db=openhab'
-data = {'q': "SELECT * FROM (SELECT mean(\"value\") FROM \"solcast\" WHERE (\"product\" = \'pvforecast\' AND \"version\" = \'latest\') AND time >= " + str(int( ldtStart *1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int((ldtEnd+4*15*60)*1000*1000*1000) + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous)) "}
+data = {'q': "SELECT * FROM (SELECT mean(\"value\") FROM \"solcast\" WHERE (\"product\" = \'pvforecast\' AND \"version\" = \'latest\') AND time >= " + str(int( ldtStart *1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int((ldtEnd)*1000*1000*1000) + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous)) "}
+#data = {'q': "SELECT * FROM (SELECT mean(\"value\") FROM \"solcast\" WHERE (\"product\" = \'pvforecast\' AND \"version\" = \'latest\') AND time >= " + str(int( ldtStart *1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int((ldtEnd+4*15*60)*1000*1000*1000) + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous)) "}
 #data = {'q': "SELECT * FROM (SELECT mean(\"value\") FROM \"solcast\" WHERE (\"product\" = \'pvforecast\' AND \"version\" = \'latest\') AND time >= " + str(int( ldtStart *1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int(ldtEnd + (periods*15)/60*60*60)*1000*1000*1000 + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous)) "}
 headers = {}
 
@@ -102,7 +106,8 @@ aa.to_csv('./timeseries_data/pv-prognose.csv', index=False, index_label="asdas",
 #aWATTar
 url = 'http://10.100.10.1:8086/query?db=marketdata'
 #data = {'q': "SELECT mean(\"value\")/1000 FROM \"awattar\" WHERE \"product\" = \'spot\' AND time >= " + str(int(ldtStart*1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int( ldtEnd + (periods*15)/60*60*60)*1000*1000*1000 + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous) "}
-data = {'q': "SELECT mean(\"value\")/1000 FROM \"awattar\" WHERE \"product\" = \'spot\' AND time >= " + str(int(ldtStart*1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int((ldtEnd+4*15*60)*1000*1000*1000) + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous) "}
+#data = {'q': "SELECT mean(\"value\")/1000 FROM \"awattar\" WHERE \"product\" = \'spot\' AND time >= " + str(int(ldtStart*1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int((ldtEnd+4*15*60)*1000*1000*1000) + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous) "}
+data = {'q': "SELECT mean(\"value\")/1000 FROM \"awattar\" WHERE \"product\" = \'spot\' AND time >= " + str(int(ldtStart*1000*1000*1000) + tzOffset*1000*1000*1000) + " and time <= " + str(int((ldtEnd)*1000*1000*1000) + tzOffset*1000*1000*1000) + " GROUP BY time(15m) fill(previous) "}
 
 #print(data)
 #exit()
@@ -127,13 +132,13 @@ aa.to_csv('./timeseries_data/awattar.csv', index=False, index_label="asdas", hea
 hourlyTimeSeries = pandas.Series(pandas.date_range(dtStart.strftime("%Y-%m-%d %H:00"), periods=periods+5, freq='15T'))
 
 #Prognose Demand Start
-demandTemplate = pandas.Series([-500 for x in range(periods+5)])
+demandTemplate = pandas.Series([-500 for x in range(periods+1)])
 demand = pandas.concat([hourlyTimeSeries, demandTemplate], axis=1, join='inner')
 demand.to_csv('./timeseries_data/demand_node1.csv', index=False, index_label="asdas", header=["Time","Demand"])
 #Prognose Demand End
 
 #Prognose Demand-EV Start
-demandTemplate = pandas.Series([0 for x in range(periods+5)])
+demandTemplate = pandas.Series([0 for x in range(periods+1)])
 demandTemplate[88:96]=-3700
 demand = pandas.concat([hourlyTimeSeries, demandTemplate], axis=1, join='inner')
 demand.to_csv('./timeseries_data/demand_ev.csv', index=False, index_label="asdas", header=["Time","Demand"])
@@ -141,7 +146,7 @@ demand.to_csv('./timeseries_data/demand_ev.csv', index=False, index_label="asdas
 
 #Price Start
 #priceTemplate = pandas.DataFrame({'Prices': [0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.13,0.3,0.3,0.3,0.3,0.3]},index=index)
-priceTemplate = pandas.Series([0.3 for x in range(periods+5)])
+priceTemplate = pandas.Series([0.3 for x in range(periods+1)])
 priceTemplate[96*0+18*4:96*0+18*4+4] = 0.13925
 priceTemplate[96*1+18*4:96*1+18*4+4] = 0.13925
 priceTemplate[96*2+18*4:96*2+18*4+4] = 0.13925
@@ -165,7 +170,7 @@ data = json.loads(r.text)
 model = calliope.Model(
     'model.yaml',
 #    override_dict={'model.subset_time': [datetime.datetime.now().strftime("%Y-%m-%d %H:00"),(datetime.datetime.today() + datetime.timedelta(days=2)).strftime("%Y-%m-%d")], 'run.solver': 'glpk',
-    override_dict={'model.subset_time': [dtStart.strftime("%Y-%m-%d %H:00"),dtEnd.strftime("%Y-%m-%d 00:00")], 'run.solver': 'glpk',
+    override_dict={'model.subset_time': [dtStart.strftime("%Y-%m-%d %H:00"),dtEnd.strftime("%Y-%m-%d %H:00")], 'run.solver': 'glpk',
 #                    'techs.battery.constraints.storage_initial': 0.4 },
                     'techs.battery.constraints.storage_initial': data/100 },
     scenario='ohne_netzflex'
