@@ -174,8 +174,42 @@ techs:
             parent: storage
             carrier: electricity
         constraints:
-            energy_cap_max: 14720  # kW
-            storage_cap_max: 40000
+            energy_cap_max: 1000  # kW
+            storage_cap_max: 9800
+#            storage_cap_max: inf
+            energy_cap_per_storage_cap_max: 0.1
+
+#            energy_cap_max: 1000  # kW
+#            storage_cap_max: inf
+#            energy_cap_per_storage_cap_max: 4
+
+#            energy_cap_equals: 1000
+#            storage_cap_equals: 5240
+
+
+
+#            energy_cap_max: 100  # kW
+#            storage_cap_max: 9800
+#            energy_cap_per_storage_cap_max: 0.05
+
+#            storage_cap_max: inf
+#            energy_cap_per_storage_cap_max: 4
+
+#            energy_cap_max: 14720  # kW
+#            energy_cap_max: 3680  # kW
+#            energy_cap_max: 100  # kW
+#            storage_cap_max: 9800
+#            storage_cap_max: 40000
+#            energy_cap_per_storage_cap_max: 0.05
+#            energy_cap_equals: 3680  # kW
+
+
+#            energy_cap_equals: 1000
+#            energy_cap_per_storage_cap_max: 10
+
+
+
+
 
             energy_eff: 0.9  # 0.95 * 0.95 = 0.9025 round trip efficiency
             storage_loss: 0.01  # No loss over time assumed
@@ -218,9 +252,11 @@ techs:
             energy_eff: 1
             lifetime: 25
 
-            units_max: 10
-            energy_cap_per_unit: 8000
-            energy_cap_min_use: 0.5
+            energy_cap_equals: 3700  # kW
+
+            units_max: 3
+            energy_cap_per_unit: 4800
+            energy_cap_min_use: 0.8
 
         costs:
             monetary:
@@ -269,9 +305,13 @@ techs:
             energy_eff: 1
             lifetime: 25
 
-            units_max: 10
-            energy_cap_per_unit: 8000
-            energy_cap_min_use: 0.5
+            energy_cap_equals: 14800  # kW
+#            cap_equals: 14800  # kW
+
+
+#            units_max: 10
+#            energy_cap_per_unit: 8000
+#            energy_cap_min_use: 0.5
 
         costs:
             monetary:
@@ -285,7 +325,10 @@ techs:
             parent: storage
             carrier: electricity_boiler
         constraints:
-            energy_cap_max: 14800  # kW
+            energy_cap_equals: 14800  # kW
+
+
+#            energy_cap_max: 14800  # kW
 #            energy_cap_min_use: 0.8
 
             storage_cap_max: 80000

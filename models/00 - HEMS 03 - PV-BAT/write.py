@@ -170,7 +170,7 @@ data = json.loads(r.text)
 model = calliope.Model(
     'model.yaml',
 #    override_dict={'model.subset_time': [datetime.datetime.now().strftime("%Y-%m-%d %H:00"),(datetime.datetime.today() + datetime.timedelta(days=2)).strftime("%Y-%m-%d")], 'run.solver': 'glpk',
-    override_dict={'model.subset_time': [dtStart.strftime("%Y-%m-%d %H:00"),dtEnd.strftime("%Y-%m-%d %H:00")], 'run.solver': 'glpk',
+    override_dict={'model.subset_time': [dtStart.strftime("%Y-%m-%d %H:%M"),dtEnd.strftime("%Y-%m-%d %H:%M")], 'run.solver': 'glpk',
 #                    'techs.battery.constraints.storage_initial': 0.4 },
                     'techs.battery.constraints.storage_initial': data/100 },
     scenario='ohne_netzflex'

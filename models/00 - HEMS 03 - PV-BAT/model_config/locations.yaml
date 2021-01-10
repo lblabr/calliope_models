@@ -49,9 +49,9 @@ locations:
                 constraints.resource: file=demand_ev.csv:Demand
 
 links:
-    location,flex_load1:
-        techs:
-           free_transmission1:
+#    location,flex_load1:
+#        techs:
+#           free_transmission1:
 
     location,ev1:
         techs:
