@@ -1,0 +1,24 @@
+##
+# Scenarios are optional, named combinations of overrides
+##
+scenarios:
+    ohne_netzflex: ['netzflex_0']
+    mit_netzflex: ['netzflex_1']
+
+##
+# Overrides are the building blocks from which scenarios can be defined
+##
+overrides:
+    netzflex_0:  # Defines a hypothetical cold fusion tech to use in group constraints
+        techs:
+            grid_netflex:
+                costs:
+                    monetary:
+                        om_con: 0 # 10p/kWh electricity price #ppt
+
+    netzflex_1:  # Defines a hypothetical cold fusion tech to use in group constraints
+        techs:
+            grid_netflex:
+                costs:
+                    monetary:
+                        om_con: file=netzflex.csv:Incentive # 10p/kWh electricity price #ppt
