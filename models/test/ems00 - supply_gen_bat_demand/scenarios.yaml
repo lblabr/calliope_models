@@ -1,0 +1,9 @@
+##
+# Scenarios are optional, named combinations of overrides
+##
+scenarios:
+
+##
+# Overrides are the building blocks from which scenarios can be defined
+##
+overrides:

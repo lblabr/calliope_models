@@ -1,0 +1,80 @@
+##
+# TECHNOLOGY DEFINITIONS
+##
+
+# Note: '-start' and '-end' is used in tutorial documentation only
+
+techs:
+
+    ##
+    # Supply
+    ##
+
+    grid_supply_variable:
+        essentials:
+            name: 'Grid Import (dyn.)'
+            color: '#40F400'
+            parent: supply
+            carrier: electricity
+        constraints:
+            lifetime: 25
+            energy_cap_max: inf
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 0 # Leistungspreis ?
+                om_con: file=prices.csv:Price # 10p/kWh electricity price #ppt
+
+    ##
+    # Demand
+    ##
+    # demand-start
+    demand_electricity:
+        essentials:
+            name: 'Power demand'
+            color: '#700700'
+            parent: demand
+            carrier: electricity
+    # demand-end
+
+    ##
+    # generation
+    ##
+    generation:
+        essentials:
+            name: 'generation'
+            color: '#90CC90'
+            parent: supply
+            carrier_out: electricity
+        constraints:
+            export_carrier: electricity
+            export_cap: 2500
+            resource: file=generation.csv:Power
+        costs:
+            monetary:
+                interest_rate: 0.1
+
+                om_con: -0.1674 # 10p/kWh electricity price #ppt
+                export: -0.12 # FIT return for energy export
+    # End
+
+    # battery-start
+    battery:
+        essentials:
+            name: 'Battery Storage'
+            color: '#FF0000'
+            parent: storage
+            carrier: electricity
+        constraints:
+            storage_initial: 0
+            energy_cap_per_storage_cap_max: 4
+            energy_cap_max: 3700  # kW
+            storage_cap_max: 40000
+            
+            energy_eff: 0.98  # 0.95 * 0.95 = 0.9025 round trip efficiency
+            storage_loss: 0.01  # No loss over time assumed
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.1
+    # battery-end

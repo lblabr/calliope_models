@@ -1,0 +1,10 @@
+locations:
+
+    location:
+        coordinates: {lat: 1, lon: 1}
+        techs:
+            grid_supply_variable:
+            generation:
+            battery:
+            demand_electricity:
+                constraints.resource: file=demand_node1.csv:Demand
