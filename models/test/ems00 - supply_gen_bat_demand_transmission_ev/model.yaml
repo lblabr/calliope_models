@@ -1,0 +1,37 @@
+import:  # Import other files from paths relative to this file, or absolute paths
+    - 'model_config/techs.yaml'
+    - 'model_config/locations.yaml'
+    - 'scenarios.yaml'
+
+model:
+    name: supply_gen_bat_demand_ev
+    
+    # What version of Calliope this model is intended for
+    calliope_version: 0.6.6
+
+    # Time series data path - can either be a path relative to this file, or an absolute path
+    timeseries_data_path: 'timeseries_data'
+
+#    subset_time: ['2020-10-31 00:00', '2020-11-7 23:45']  # Subset of timesteps
+    subset_time: ['2020-10-31 00:00', '2020-11-11 23:00']  # Subset of timesteps
+
+run:
+    mode: operate #plan #operate  # Choices: plan, operate
+
+    operation:
+        horizon: 144  # hours
+        window: 144 # hours
+#        horizon: 48  # hours
+#        window: 24  # hours
+
+    solver: glpk #glpk #cbc
+
+    ensure_feasibility: true # Switching on unmet demand
+
+    cyclic_storage: true
+
+    bigM: 1e6 # setting the scale of unmet demand, which cannot be too high, otherwise the optimisation will not converge
+
+    objective_options.cost_class: {monetary: 1}
+
+

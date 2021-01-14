@@ -1,0 +1,226 @@
+##
+# TECHNOLOGY DEFINITIONS
+##
+
+# Note: '-start' and '-end' is used in tutorial documentation only
+
+techs:
+
+    ##
+    # Supply
+    ##
+
+    grid_supply_variable:
+        essentials:
+            name: 'Grid Import (dyn.)'
+            color: '#40F400'
+            parent: supply
+            carrier: electricity
+        constraints:
+            lifetime: 25
+            energy_cap_max: inf
+        costs:
+            monetary:
+                interest_rate: 0.10
+                energy_cap: 0 # Leistungspreis ?
+                om_con: file=prices.csv:Price # 10p/kWh electricity price #ppt
+
+    ##
+    # Demand
+    ##
+    # demand-start
+    demand_electricity:
+        essentials:
+            name: 'Power demand'
+            color: '#700700'
+            parent: demand
+            carrier: electricity
+    # demand-end
+
+    ##
+    # generation
+    ##
+    generation:
+        essentials:
+            name: 'generation'
+            color: '#90CC90'
+            parent: supply
+            carrier_out: electricity
+        constraints:
+            export_carrier: electricity
+            export_cap: 2500
+            resource: file=generation.csv:Power
+        costs:
+            monetary:
+                interest_rate: 0.1
+
+                om_con: -0.1674 # 10p/kWh electricity price #ppt
+                export: -0.12 # FIT return for energy export
+    # End
+
+    # battery-start
+    battery:
+        essentials:
+            name: 'Battery Storage'
+            color: '#FF0000'
+            parent: storage
+            carrier: electricity
+        constraints:
+            storage_initial: 0
+
+            energy_cap_equals: 3700  # kW
+            storage_cap_equals: 10000
+            
+#            energy_cap_per_storage_cap_min: 1
+#            energy_cap_max: inf
+            
+            energy_eff: 0.98  # 0.95 * 0.95 = 0.9025 round trip efficiency
+            storage_loss: 0.01  # No loss over time assumed
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.1
+
+
+    battery2:
+        essentials:
+            name: 'Battery Storage2'
+            color: '#FF00AA'
+            parent: storage
+            carrier: electricity
+        constraints:
+
+            storage_initial: 0
+#            energy_cap_per_storage_cap_equals: 1
+#            energy_cap_per_storage_cap_max: 4
+
+#            units_equals: 1
+#            energy_cap_per_unit: 3700
+#            storage_cap_per_unit: 10000
+#            energy_cap_min_use: 0.3
+
+#            energy_cap_equals: 3700
+
+            energy_cap_max: 3700  # kW
+            storage_cap_equals: 10000
+
+            energy_eff: 1  # 0.95 * 0.95 = 0.9025 round trip efficiency
+            storage_loss: 0.001  # No loss over time assumed
+            lifetime: 25
+
+        costs:
+            monetary:
+                interest_rate: 0.1
+
+    battery3:
+        essentials:
+            name: 'Battery Storage3'
+            color: '#CCCCCC'
+            parent: storage
+            carrier: electricity
+        constraints:
+
+            storage_initial: 0
+#            energy_cap_per_storage_cap_equals: 1
+#            energy_cap_per_storage_cap_max: 4
+
+
+            energy_cap_equals: 3700  # kW
+            storage_cap_equals: 10000
+
+            units_equals: 1
+            energy_cap_per_unit: 3700
+            energy_cap_min_use: 0.3
+
+            storage_cap_per_unit: 10000
+
+            energy_eff: 1  # 0.95 * 0.95 = 0.9025 round trip efficiency
+            storage_loss: 0.001  # No loss over time assumed
+            lifetime: 25
+
+        costs:
+            monetary:
+                interest_rate: 0.1
+
+    # battery-end
+
+
+    ##EV
+    ev:
+        essentials:
+            name: 'Electric Vehicle'
+            color: '#1000AA'
+            parent: conversion
+            carrier_in: electricity
+            carrier_out: electricity_ev
+        constraints:
+            energy_eff: 1
+            lifetime: 25
+
+            energy_cap_equals: 3700  # kW
+
+            units_equals: 1
+            energy_cap_per_unit: 3700
+            energy_cap_min_use: 0.2
+
+        costs:
+            monetary:
+                energy_cap: 0
+                interest_rate: 0.10
+
+    ev_bat:
+        essentials:
+            name: 'ev_bat'
+            color: '#00AAAA'
+            parent: storage
+            carrier: electricity_ev
+        constraints:
+            storage_initial: 0
+
+            energy_cap_equals: 3700  # kW
+            storage_cap_equals: 10000
+
+            energy_eff: 1  # 0.95 * 0.95 = 0.9025 round trip efficiency
+            storage_loss: 0.001  # No loss over time assumed
+            lifetime: 25
+        costs:
+            monetary:
+                interest_rate: 0.11
+# 
+
+    ev_demand:
+        essentials:
+            name: 'ev_demand'
+            color: '#A00A00'
+            parent: demand
+            carrier: electricity_ev
+    ##EV
+
+
+
+
+
+
+
+
+
+
+
+    
+    # transmission-start
+
+    free_transmission1:
+        essentials:
+            name: 'Local power transmission'
+            color: '#C00C00'
+            parent: transmission
+            carrier: electricity
+        constraints:
+#            energy_cap_max: 600
+            energy_eff: 1.0
+        costs:
+            monetary:
+                om_prod: 0
+        
+    
+    

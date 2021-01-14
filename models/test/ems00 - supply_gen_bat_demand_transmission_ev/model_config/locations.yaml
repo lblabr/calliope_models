@@ -1,0 +1,67 @@
+locations:
+
+    location:
+        coordinates: {lat: 1, lon: 1}
+        techs:
+            grid_supply_variable:
+            generation:
+#            battery:
+            demand_electricity:
+                constraints.resource: file=demand_node1.csv:Demand
+                
+    battery.coordinates: {lat: 1, lon: 2}
+    battery:
+        techs:
+            battery:
+
+    battery2.coordinates: {lat: 1, lon: 3}
+    battery2:
+        techs:
+            battery2:
+                essentials:
+                    color: '#FFFF00'
+
+    ev.coordinates: {lat: 2, lon: 2}
+    ev:
+        techs:
+            ev:
+            ev_bat:
+            ev_demand:
+                constraints.resource: file=demand_ev.csv:Demand
+
+    ev2.coordinates: {lat: 2, lon: 3}
+    ev2:
+        techs:
+            ev:
+            battery3:
+            ev_demand:
+                constraints.resource: file=demand_ev.csv:Demand
+
+
+links:
+    location,ev:
+        techs:
+           free_transmission1:
+                constraints:
+                    energy_cap_max: 3700
+                    energy_cap_min: 400
+    location,ev2:
+        techs:
+           free_transmission1:
+                constraints:
+                    energy_cap_max: 3700
+                    energy_cap_min: 400
+
+    location,battery:
+        techs:
+           free_transmission1:
+                constraints:
+                    energy_cap_max: 3700
+                    energy_cap_min: 500
+
+    location,battery2:
+        techs:
+           free_transmission1:
+                constraints:
+                    energy_cap_max: 3700
+                    energy_cap_min: 600
